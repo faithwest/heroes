@@ -1,42 +1,36 @@
+# models.py
+from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import relationship
-
 
 db = SQLAlchemy()
 
 class Hero(db.Model):
-    __tablename__ = 'hero'
+    __tablename__ = 'heroes'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True)
-    super_name = db.Column(db.String, unique=True)
-    created_at = db.Column(db.Date)
-    updated_at = db.Column(db.Date)
-    
-    powers = relationship('Power', secondary='Hero_Power', back_populates='heroes')
+    name = db.Column(db.String(255))
+    super_name = db.Column(db.String(255))
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
-
-
-    
+    powers = db.relationship('Power', secondary='hero_power')
 
 class Power(db.Model):
-    _tablename__ = 'power'
-
+    __tablename__ = 'powers'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True)
-    description = db.Column(db.String)
-    created_at = db.Column(db.Date)
-    updated_at = db.Column(db.Date)
+    name = db.Column(db.String(255))
+    description = db.Column(db.String(255))
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
-    heroes = relationship('Hero', secondary='Hero_Power', back_populates='powers')
+
 class Hero_Power(db.Model):
-    _tablename__ = 'hero_power'
+    __tablename__ = 'hero_power'
 
     id = db.Column(db.Integer, primary_key=True)
-    hero_id = db.Column(db.Integer, db.ForeignKey('hero.id'))
-    power_id = db.Column(db.Integer, db.ForeignKey('power.id'))
-    strength = db.Column(db.String(20))
-    created_at = db.Column(db.Date)
-    updated_at = db.Column(db.Date)
- 
+    hero_id = db.Column(db.Integer, db.ForeignKey('heroes.id'), nullable=False)
+    power_id = db.Column(db.Integer, db.ForeignKey('powers.id'), nullable=False)
+    strength = db.Column(db.String(255))
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
