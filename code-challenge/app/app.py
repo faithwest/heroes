@@ -9,9 +9,13 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 migrate = Migrate(app, db)
 
 db.init_app(app)
+@app.route('/home')
+def home():
+    return "Welcome to the Heroes!"
+
 
 # GET /heroes
-@app.route('/heroes', methods=['GET'])
+@app.route('/Hero', methods=['GET'])
 def get_heroes():
     heroes = Hero.query.all()
     heroes_data = [{'id': hero.id, 'name': hero.name, 'super_name': hero.super_name} for hero in heroes]
@@ -34,7 +38,7 @@ def get_hero(hero_id):
     return jsonify(hero_data)
 
 # GET /powers
-@app.route('/powers', methods=['GET'])
+@app.route('/Powers', methods=['GET'])
 def get_powers():
     powers = Power.query.all()
     powers_data = [{'id': power.id, 'name': power.name, 'description': power.description} for power in powers]
@@ -101,4 +105,4 @@ def create_hero_power():
         return jsonify({'errors': ['Invalid data format']}), 400
 
 if __name__ == '__main__':
-    app.run(port=5555)
+    app.run(port=5555, debug=True)
