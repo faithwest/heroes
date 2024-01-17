@@ -2,20 +2,22 @@ from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 from flask_migrate import Migrate
 from models import db, Hero, Power, Hero_Power
+
 app = Flask(__name__)
 CORS(app)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 migrate = Migrate(app, db)
 db.init_app(app)
 
-# Default route
+#  route
 @app.route('/')
 def default_route():
-    return jsonify({'message': 'Welcome to the API!'})
-
-# Error handling for 404 responses
+    return jsonify({'message': 'Welcome to the API!'}), 404
+    
+ 
 @app.after_request
 def handle_404(response):
     if response.status_code == 404:
@@ -83,7 +85,6 @@ def update_power(power_id):
 @app.route('/hero_powers', methods=['POST'])
 def create_hero_power():
     try:
-        # Ensure 'Content-Type' is 'application/json'
         if request.headers.get('Content-Type') != 'application/json':
             abort(415, {'error': 'Unsupported Media Type. Use application/json.'})
 
@@ -92,19 +93,19 @@ def create_hero_power():
         power_id = data.get('power_id')
         strength = data.get('strength')
 
-        # Validate existence of hero and power
         hero = Hero.query.get(hero_id)
         power = Power.query.get(power_id)
 
         if not hero or not power:
             abort(404, {'errors': ['Hero or Power not found']})
 
-        # Create HeroPower
+        assert strength.lower() in ['strong', 'weak', 'average'], f"Invalid strength: {strength}"
+    
+
         hero_power = Hero_Power(hero_id=hero_id, power_id=power_id, strength=strength)
         db.session.add(hero_power)
         db.session.commit()
 
-        # Return updated hero data
         hero_data = {
             'id': hero.id,
             'name': hero.name,

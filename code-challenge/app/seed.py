@@ -7,7 +7,7 @@ fake = Faker()
 
 def seed_powers():
     powers_data = [
-        {"name": fake.word(), "description": fake.text()[:20]} for _ in range(20)
+        {"name": fake.word(), "description": fake.text()[:20]} for _ in range(10)
     ]
 
     for power_info in powers_data:
@@ -16,7 +16,7 @@ def seed_powers():
 
 def seed_heroes():
     heroes_data = [
-        {"name": fake.name(), "super_name": fake.word()} for _ in range(20)
+        {"name": fake.name(), "super_name": fake.word()} for _ in range(10)
     ]
 
     for hero_info in heroes_data:
