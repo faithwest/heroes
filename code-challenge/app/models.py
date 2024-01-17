@@ -42,5 +42,5 @@ class Hero_Power(db.Model):
 
     @validates('strength')
     def validate_strength(self, key, strength):
-        assert strength in ['Strong', 'Weak', 'Average'], f"Invalid strength: {strength}"
+        assert strength.lower() in ['strong', 'weak', 'average'], f"Invalid strength: {strength}"
         return strength

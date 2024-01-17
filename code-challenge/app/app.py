@@ -99,6 +99,9 @@ def create_hero_power():
         if not hero or not power:
             abort(404, {'errors': ['Hero or Power not found']})
 
+        assert strength.lower() in ['strong', 'weak', 'average'], f"Invalid strength: {strength}"
+    
+
         hero_power = Hero_Power(hero_id=hero_id, power_id=power_id, strength=strength)
         db.session.add(hero_power)
         db.session.commit()
